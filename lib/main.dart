@@ -30,18 +30,24 @@ class _MyHomePageState extends State<MyHomePage> {
   GlobalKey _globalKey = new GlobalKey();
 
   bool inside = false;
-  Uint8List imageInMemory;
+  Uint8List? imageInMemory;
 
-  Future<Uint8List> _capturePng() async {
+  @override
+  void initState() {
+    super.initState();
+
+  }
+
+  Future<Uint8List?> _capturePng() async {
     try {
       print('inside');
       inside = true;
-      RenderRepaintBoundary boundary =
-          _globalKey.currentContext.findRenderObject();
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData.buffer.asUint8List();
+      RenderRepaintBoundary? boundary =
+          _globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+      ui.Image? image = await boundary?.toImage(pixelRatio: 1.0);
+      ByteData? byteData =
+          await image?.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List? pngBytes = byteData?.buffer.asUint8List();
 //      String bs64 = base64Encode(pngBytes);
 //      print(pngBytes);
 //      print(bs64);
@@ -72,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   new Text(
                     'click the button below to capture image',
                   ),
-                  new RaisedButton(
+                  new MaterialButton(
                     child: Text('capture Image'),
                     onPressed: _capturePng,
                   ),
@@ -80,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   :
                   imageInMemory != null
                       ? Container(
-                          child: Image.memory(imageInMemory),
+                          child: Image.memory(imageInMemory!),
                           margin: EdgeInsets.all(10))
                       : Container(),
                 ],
